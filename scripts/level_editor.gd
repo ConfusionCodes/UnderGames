@@ -1,7 +1,8 @@
 extends Node2D
 class_name LevelEditor
 
-var SCREEN_SIZE: float = 720.0;
+const SCREEN_SIZE: float = 720.0;
+const DEBUG_LEVEL: String = "res://levels/debug.tres";
 
 @export var WALL_TEXTURE: Texture2D;
 @export var BOX_TEXTURE: Texture2D;
@@ -11,18 +12,24 @@ var SCREEN_SIZE: float = 720.0;
 @onready var playfield: NinePatchRect = $Playfield
 @onready var enemy: Sprite2D = $Enemy
 @onready var player: Sprite2D = $Player
-@onready var save_button: Button = $SaveButton
-@onready var menu_button: Button = $MenuButton
+@onready var save_button: Button = %SaveButton
+@onready var menu_button: Button = %MenuButton
 @onready var error_label: Label = $Playfield/ErrorLabel
-@onready var bullet_button: Button = $BulletButton
+@onready var bullet_button: Button = %BulletButton
 @onready var bullets: Node2D = $Bullets
+@onready var grid_size_down_button: Button = %GridSizeDownButton
+@onready var grid_size_up_button: Button = %GridSizeUpButton
 
 var path: String;
 var level: ShooterLevel;
 
 func _ready() -> void:
-	path = "user://debug.tres";
-	level = preload("res://levels/debug.tres");
+	path = SceneManager.current_path;
+	level = SceneManager.current_level;
+	if !level or path.is_empty():
+		path = DEBUG_LEVEL;
+		level = preload(DEBUG_LEVEL);
+		
 	layout()
 
 func layout() -> void:
@@ -50,29 +57,36 @@ func layout() -> void:
 	playfield.position.y = tile_size * 1.5;
 	
 	enemy.scale = Vector2(tile_scale, tile_scale);
-	enemy.position.x = SCREEN_SIZE / 2 + tile_size * (level.size % 2);
+	enemy.position.x = SCREEN_SIZE / 2;
 	player.scale = Vector2(tile_scale, tile_scale);
 	player.position.y = tile_size * 2 + playfield.size.y;
-	player.position.x = SCREEN_SIZE / 2 + tile_size * (level.size % 2);
+	player.position.x = SCREEN_SIZE / 2;
+	if level.size % 2 == 0:
+		enemy.position.x += tile_size / 2;
+		player.position.x += tile_size / 2;
 	
 	bullet_button.position.y = player.position.y;
 	bullet_button.size.y = tile_size;
 	bullet_button.size.x = SCREEN_SIZE;
 	
-	if bullets.get_child_count() != level.bullets:
-		for child in bullets.get_children():
-			child.queue_free();
-		for bullet_index in level.bullets:
-			var bullet: Sprite2D = BULLET_INDICATOR_SCENE.instantiate();
-			bullet.scale = player.scale;
-			bullet.position.y = player.position.y;
-			bullet.position.x = player.position.x + (tile_size / 2 + Board.PADDING) * (bullet_index + .5);
-			bullets.add_child(bullet);
-		
+	#if bullets.get_child_count() != level.bullets:
+	for child in bullets.get_children():
+		child.queue_free();
+	for bullet_index in level.bullets:
+		var bullet: Sprite2D = BULLET_INDICATOR_SCENE.instantiate();
+		bullet.scale = player.scale;
+		bullet.position.y = player.position.y;
+		bullet.position.x = player.position.x + (tile_size / 2 + Board.PADDING) * (bullet_index + .5);
+		bullets.add_child(bullet);
+	
 	
 	menu_button.size = Vector2(tile_size, tile_size);
 	save_button.size = Vector2(tile_size, tile_size);
 	save_button.position.x = 720 - tile_size;
+	grid_size_up_button.size = Vector2(tile_size, tile_size / 2);
+	grid_size_up_button.position.y = player.position.y;
+	grid_size_down_button.size = Vector2(tile_size, tile_size / 2);
+	grid_size_down_button.position.y = player.position.y + tile_size / 2;
 
 func tile_texture(id: int) -> Texture2D:
 	match id:
@@ -99,5 +113,11 @@ func _add_bullet() -> void:
 	level.bullets += 1;
 	if level.bullets > ShooterLevel.MAX_BULLETS:
 		level.bullets = 1;
-	layout()
-	print(level.bullets)
+	layout();
+
+
+func _change_grid_size(add: int) -> void:
+	level.size += add;
+	if level.size < 3: level.size = 3;
+	level.tiles.resize(level.size_squared());
+	layout();

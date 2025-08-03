@@ -1,10 +1,33 @@
-[gd_scene load_steps=4 format=3 uid="uid://baaljsb10l0jf"]
+[gd_scene load_steps=12 format=3 uid="uid://baaljsb10l0jf"]
 
 [ext_resource type="Theme" uid="uid://cjbd068b7pstb" path="res://themes/shooter_theme.tres" id="1_kbfw1"]
 [ext_resource type="Script" uid="uid://cdm0dxd6ecv8k" path="res://scripts/custom_level_select.gd" id="2_yuj0b"]
+[ext_resource type="Shader" uid="uid://cujewei8h3d5a" path="res://shaders/blur.gdshader" id="3_40okl"]
+[ext_resource type="Texture2D" uid="uid://blkyjoq1sfog6" path="res://sprites/background.svg" id="4_md64b"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fh7ol"]
 bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2s35g"]
+shader = ExtResource("3_40okl")
+shader_parameter/amount = 1.5
+shader_parameter/brightness = 0.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_leaj0"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p1l8q"]
+texture = ExtResource("4_md64b")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_88pyh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_smmx3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dbjda"]
 
 [node name="CustomLevelSlelect" type="Panel"]
 anchors_preset = 15
@@ -17,6 +40,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_fh7ol")
 script = ExtResource("2_yuj0b")
 
 [node name="Home Button" type="Button" parent="."]
+layout_mode = 0
 offset_right = 240.0
 offset_bottom = 120.0
 size_flags_horizontal = 0
@@ -24,11 +48,109 @@ size_flags_vertical = 0
 text = "Back"
 expand_icon = true
 
+[node name="NewButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 479.0
+offset_right = 719.0
+offset_bottom = 120.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "New"
+expand_icon = true
+
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 0
 offset_top = 120.0
 offset_right = 720.0
 offset_bottom = 1280.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
-[node name="Levels" type="VBoxContainer" parent="MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
 layout_mode = 2
+
+[node name="LevelContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameInputPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_2s35g")
+layout_mode = 0
+offset_right = 720.0
+offset_bottom = 1280.0
+theme = ExtResource("1_kbfw1")
+theme_override_styles/panel = SubResource("StyleBoxFlat_leaj0")
+
+[node name="MarginContainer" type="MarginContainer" parent="NameInputPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_right = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NameInputPanel/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 30
+
+[node name="Label" type="Label" parent="NameInputPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Enter Level Name"
+horizontal_alignment = 1
+
+[node name="Background" type="PanelContainer" parent="NameInputPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_kbfw1")
+theme_override_styles/panel = SubResource("StyleBoxTexture_p1l8q")
+
+[node name="MarginContainer" type="MarginContainer" parent="NameInputPanel/MarginContainer/VBoxContainer/Background"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NameInputPanel/MarginContainer/VBoxContainer/Background/MarginContainer"]
+layout_mode = 2
+
+[node name="NameEdit" type="LineEdit" parent="NameInputPanel/MarginContainer/VBoxContainer/Background/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_88pyh")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_smmx3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_dbjda")
+placeholder_text = "New Level"
+
+[node name="ErrorLabel" type="Label" parent="NameInputPanel/MarginContainer/VBoxContainer/Background/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+modulate = Color(1, 0, 0, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Could not save level. Error code: {0}"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NameInputPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CancelButton" type="Button" parent="NameInputPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Cancel
+"
+
+[node name="CreateButton" type="Button" parent="NameInputPanel/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Create"
+
+[connection signal="pressed" from="Home Button" to="." method="_on_home_button_pressed"]
+[connection signal="pressed" from="NewButton" to="." method="_on_new_button_pressed"]
+[connection signal="pressed" from="NameInputPanel/MarginContainer/VBoxContainer/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="NameInputPanel/MarginContainer/VBoxContainer/HBoxContainer/CreateButton" to="." method="_on_create_button_pressed"]

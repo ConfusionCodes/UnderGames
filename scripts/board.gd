@@ -2,9 +2,7 @@ extends Node2D
 class_name Board
 
 const PADDING = 16.0;
-
-static func get_tile_size(playfield_size: float, grid_size: int) -> float:
-	return (playfield_size - PADDING * 2) / grid_size;
+const DEBUG_LEVEL: ShooterLevel = preload("res://levels/debug.tres");
 
 @onready var playfield: NinePatchRect = %Playfield
 @onready var enemy: Enemy = %Enemy
@@ -14,7 +12,7 @@ static func get_tile_size(playfield_size: float, grid_size: int) -> float:
 @onready var menu_button: Button = %MenuButton
 @onready var reset_button: Button = %ResetButton
 @onready var menu: BoardUi = %Menu
-@onready var notification_panel: Panel = %NotificationPanel
+@onready var notification_panel: PanelContainer = %NotificationPanel
 @onready var notification_label: Label = %NotificationLabel
 
 @export_group("Scenes")
@@ -24,8 +22,11 @@ static func get_tile_size(playfield_size: float, grid_size: int) -> float:
 @export var BULLET_INDICATOR_SCENE: PackedScene;
 @export var BULLET_SCENE: PackedScene;
 @export_group("Settings")
-@export var level: ShooterLevel = preload("res://levels/debug.tres");
+@export var level: ShooterLevel;
 @export var bullets: int = 2;
+
+static func get_tile_size(playfield_size: float, grid_size: int) -> float:
+	return (playfield_size - PADDING * 2) / grid_size;
 
 var tile_size: float = 0.0 :
 	set(value):
@@ -50,7 +51,8 @@ func _ready() -> void:
 	if SceneManager.current_level:
 		load_level(SceneManager.current_level);
 	else:
-		load_level(level);
+		printerr("Failed to find current level, loading debug level as fallback.")
+		load_level(DEBUG_LEVEL);
 
 func load_level(new_level: ShooterLevel) -> void:
 	player.position = Vector2.ZERO;

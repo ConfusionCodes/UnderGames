@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b46w65cvp5ldw"]
+[gd_scene load_steps=15 format=3 uid="uid://b46w65cvp5ldw"]
 
 [ext_resource type="Script" uid="uid://b77gjxnhtqjrc" path="res://scripts/level_editor.gd" id="1_jjsnv"]
 [ext_resource type="Texture2D" uid="uid://cocj1hg7nu3lm" path="res://sprites/immovable.svg" id="2_2rodj"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://duflvhgdwjv07" path="res://sprites/player.svg" id="8_dx6d3"]
 [ext_resource type="Theme" uid="uid://cjbd068b7pstb" path="res://themes/shooter_theme.tres" id="11_brq3b"]
 [ext_resource type="Texture2D" uid="uid://yfaqch5kdc73" path="res://sprites/ui/menu_icon.svg" id="12_qj4bx"]
+[ext_resource type="Script" uid="uid://dfdkh0efyfqb" path="res://scripts/editor_ui.gd" id="12_wkaig"]
 [ext_resource type="Shader" uid="uid://cujewei8h3d5a" path="res://shaders/blur.gdshader" id="14_m5gst"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vevib"]
@@ -69,11 +70,29 @@ centered = false
 offset = Vector2(-256, 0)
 
 [node name="BulletButton" type="Button" parent="."]
+unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 offset_right = 48.0
 offset_bottom = 48.0
 
+[node name="GridSizeUpButton" type="Button" parent="."]
+unique_name_in_owner = true
+offset_right = 48.0
+offset_bottom = 48.0
+theme = ExtResource("11_brq3b")
+text = "+"
+clip_text = true
+
+[node name="GridSizeDownButton" type="Button" parent="."]
+unique_name_in_owner = true
+offset_right = 48.0
+offset_bottom = 48.0
+theme = ExtResource("11_brq3b")
+text = "-"
+clip_text = true
+
 [node name="SaveButton" type="Button" parent="."]
+unique_name_in_owner = true
 offset_right = 48.0
 offset_bottom = 48.0
 theme = ExtResource("11_brq3b")
@@ -82,6 +101,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="MenuButton" type="Button" parent="."]
+unique_name_in_owner = true
 offset_right = 48.0
 offset_bottom = 48.0
 theme = ExtResource("11_brq3b")
@@ -94,7 +114,9 @@ visible = false
 material = SubResource("ShaderMaterial_vevib")
 offset_right = 720.0
 offset_bottom = 1280.0
+theme = ExtResource("11_brq3b")
 theme_override_styles/panel = SubResource("StyleBoxFlat_p3su8")
+script = ExtResource("12_wkaig")
 
 [node name="Margins" type="MarginContainer" parent="Menu"]
 layout_mode = 2
@@ -103,7 +125,28 @@ theme_override_constants/margin_top = 200
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 200
 
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu/Margins"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="Menu/Margins/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[node name="PlayButton" type="Button" parent="Menu/Margins/VBoxContainer"]
+layout_mode = 2
+text = "Save & Play"
+
+[node name="LevelSelectButton" type="Button" parent="Menu/Margins/VBoxContainer"]
+layout_mode = 2
+text = "Level Select"
+
 [node name="Bullets" type="Node2D" parent="."]
 
 [connection signal="pressed" from="BulletButton" to="." method="_add_bullet"]
+[connection signal="pressed" from="GridSizeUpButton" to="." method="_change_grid_size" binds= [1]]
+[connection signal="pressed" from="GridSizeDownButton" to="." method="_change_grid_size" binds= [-1]]
 [connection signal="pressed" from="SaveButton" to="." method="save"]
+[connection signal="pressed" from="MenuButton" to="Menu" method="_on_menu_button_pressed"]
+[connection signal="pressed" from="Menu/Margins/VBoxContainer/BackButton" to="Menu" method="_on_back_button_pressed"]
+[connection signal="pressed" from="Menu/Margins/VBoxContainer/PlayButton" to="Menu" method="_on_play_button_pressed"]
+[connection signal="pressed" from="Menu/Margins/VBoxContainer/LevelSelectButton" to="Menu" method="_on_level_select_button_pressed"]

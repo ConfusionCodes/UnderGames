@@ -20,3 +20,6 @@ func _enter_level(path: String) -> void:
 
 func _enter_home_menu() -> void:
 	SceneManager.enter_menu();
+
+func _enter_custom_select() -> void:
+	SceneManager.enter_custom_level_select();

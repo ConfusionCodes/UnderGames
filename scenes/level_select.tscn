@@ -52,3 +52,4 @@ theme_override_constants/v_separation = 64
 columns = 3
 
 [connection signal="pressed" from="Home Button" to="." method="_enter_home_menu"]
+[connection signal="pressed" from="My Levels Button" to="." method="_enter_custom_select"]
