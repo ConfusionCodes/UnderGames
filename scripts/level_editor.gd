@@ -1,0 +1,103 @@
+extends Node2D
+class_name LevelEditor
+
+var SCREEN_SIZE: float = 720.0;
+
+@export var WALL_TEXTURE: Texture2D;
+@export var BOX_TEXTURE: Texture2D;
+@export var BULLET_INDICATOR_SCENE: PackedScene;
+
+@onready var tile_grid: GridContainer = $Playfield/TileGrid
+@onready var playfield: NinePatchRect = $Playfield
+@onready var enemy: Sprite2D = $Enemy
+@onready var player: Sprite2D = $Player
+@onready var save_button: Button = $SaveButton
+@onready var menu_button: Button = $MenuButton
+@onready var error_label: Label = $Playfield/ErrorLabel
+@onready var bullet_button: Button = $BulletButton
+@onready var bullets: Node2D = $Bullets
+
+var path: String;
+var level: ShooterLevel;
+
+func _ready() -> void:
+	path = "user://debug.tres";
+	level = preload("res://levels/debug.tres");
+	layout()
+
+func layout() -> void:
+	tile_grid.columns = level.size
+	var new_tiles: bool = false;
+	if tile_grid.get_child_count() != level.size_squared():
+		for child in tile_grid.get_children():
+			child.queue_free();
+		new_tiles = true;
+	for i in level.size_squared():
+		var fake_tile: TextureButton;
+		if new_tiles:
+			fake_tile = TextureButton.new();
+			fake_tile.size_flags_horizontal |= Control.SIZE_EXPAND
+			fake_tile.size_flags_vertical |= Control.SIZE_EXPAND
+			fake_tile.ignore_texture_size = true;
+			fake_tile.stretch_mode = TextureButton.STRETCH_SCALE;
+			fake_tile.pressed.connect(_swap_tile.bind(i));
+			tile_grid.add_child(fake_tile);
+		else:
+			fake_tile = tile_grid.get_child(i);
+		fake_tile.texture_normal = tile_texture(level.tiles[i]);
+	var tile_size: float = Board.get_tile_size(playfield.size.x, level.size);
+	var tile_scale: float = tile_size / Tile.BASE_SIZE;
+	playfield.position.y = tile_size * 1.5;
+	
+	enemy.scale = Vector2(tile_scale, tile_scale);
+	enemy.position.x = SCREEN_SIZE / 2 + tile_size * (level.size % 2);
+	player.scale = Vector2(tile_scale, tile_scale);
+	player.position.y = tile_size * 2 + playfield.size.y;
+	player.position.x = SCREEN_SIZE / 2 + tile_size * (level.size % 2);
+	
+	bullet_button.position.y = player.position.y;
+	bullet_button.size.y = tile_size;
+	bullet_button.size.x = SCREEN_SIZE;
+	
+	if bullets.get_child_count() != level.bullets:
+		for child in bullets.get_children():
+			child.queue_free();
+		for bullet_index in level.bullets:
+			var bullet: Sprite2D = BULLET_INDICATOR_SCENE.instantiate();
+			bullet.scale = player.scale;
+			bullet.position.y = player.position.y;
+			bullet.position.x = player.position.x + (tile_size / 2 + Board.PADDING) * (bullet_index + .5);
+			bullets.add_child(bullet);
+		
+	
+	menu_button.size = Vector2(tile_size, tile_size);
+	save_button.size = Vector2(tile_size, tile_size);
+	save_button.position.x = 720 - tile_size;
+
+func tile_texture(id: int) -> Texture2D:
+	match id:
+		1: return BOX_TEXTURE;
+		2: return WALL_TEXTURE;
+		_: return null;
+
+func save() -> void:
+	var error := ResourceSaver.save(level, path);
+	if error != Error.OK:
+		error_label.visible = true;
+		error_label.text = error_label.text % error;
+
+
+func _swap_tile(index: int) -> void:
+	level.tiles[index] = level.tiles[index] + 1 if level.tiles[index] < ShooterLevel.TILE_TYPES else 0;
+	var child := tile_grid.get_children()[index];
+	if child is TextureButton:
+		(child as TextureButton).texture_normal = tile_texture(level.tiles[index]);
+	else:
+		layout();
+
+func _add_bullet() -> void:
+	level.bullets += 1;
+	if level.bullets > ShooterLevel.MAX_BULLETS:
+		level.bullets = 1;
+	layout()
+	print(level.bullets)

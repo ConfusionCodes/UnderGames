@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://2xc7iukl6ghm"]
+
+[ext_resource type="Texture2D" uid="uid://blkyjoq1sfog6" path="res://sprites/background.svg" id="1_4qnlp"]
+[ext_resource type="Script" path="res://scripts/board.gd" id="2_y628x"]
+[ext_resource type="PackedScene" uid="uid://d0vemywseygr6" path="res://scenes/box.tscn" id="3_bohvn"]
+[ext_resource type="PackedScene" uid="uid://dfb4cwf8wj355" path="res://scenes/wall.tscn" id="4_x7vh5"]
+[ext_resource type="Texture2D" uid="uid://dfe3t4oaypw1h" path="res://sprites/enemy.svg" id="5_mrn8v"]
+
+[node name="Board" type="Node2D"]
+script = ExtResource("2_y628x")
+BOX_SCENE = ExtResource("3_bohvn")
+WALL_SCENE = ExtResource("4_x7vh5")
+grid_size = null
+padding = null
+
+[node name="Playfield" type="NinePatchRect" parent="."]
+texture_filter = 1
+offset_right = 720.0
+offset_bottom = 720.0
+texture = ExtResource("1_4qnlp")
+patch_margin_left = 32
+patch_margin_top = 32
+patch_margin_right = 32
+patch_margin_bottom = 32
+
+[node name="Enemy" type="Sprite2D" parent="."]
+position = Vector2(360, 0)
+texture = ExtResource("5_mrn8v")
+offset = Vector2(0, 256)

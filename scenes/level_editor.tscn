@@ -1,0 +1,109 @@
+[gd_scene load_steps=14 format=3 uid="uid://b46w65cvp5ldw"]
+
+[ext_resource type="Script" uid="uid://b77gjxnhtqjrc" path="res://scripts/level_editor.gd" id="1_jjsnv"]
+[ext_resource type="Texture2D" uid="uid://cocj1hg7nu3lm" path="res://sprites/immovable.svg" id="2_2rodj"]
+[ext_resource type="Texture2D" uid="uid://mcgdaqtl682l" path="res://sprites/movable.svg" id="3_4ohjn"]
+[ext_resource type="PackedScene" uid="uid://bh4a4dg1bph6j" path="res://scenes/bullet_indicator.tscn" id="4_3fkon"]
+[ext_resource type="Texture2D" uid="uid://dfe3t4oaypw1h" path="res://sprites/enemy.svg" id="5_4ohjn"]
+[ext_resource type="Texture2D" uid="uid://d1ln7fyj7f5f1" path="res://sprites/ui/save_icon.svg" id="5_gbqyk"]
+[ext_resource type="Texture2D" uid="uid://blkyjoq1sfog6" path="res://sprites/background.svg" id="6_ahl3k"]
+[ext_resource type="Texture2D" uid="uid://duflvhgdwjv07" path="res://sprites/player.svg" id="8_dx6d3"]
+[ext_resource type="Theme" uid="uid://cjbd068b7pstb" path="res://themes/shooter_theme.tres" id="11_brq3b"]
+[ext_resource type="Texture2D" uid="uid://yfaqch5kdc73" path="res://sprites/ui/menu_icon.svg" id="12_qj4bx"]
+[ext_resource type="Shader" uid="uid://cujewei8h3d5a" path="res://shaders/blur.gdshader" id="14_m5gst"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vevib"]
+shader = ExtResource("14_m5gst")
+shader_parameter/amount = 1.5
+shader_parameter/brightness = 0.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p3su8"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="LevelEditor" type="Node2D"]
+script = ExtResource("1_jjsnv")
+WALL_TEXTURE = ExtResource("2_2rodj")
+BOX_TEXTURE = ExtResource("3_4ohjn")
+BULLET_INDICATOR_SCENE = ExtResource("4_3fkon")
+
+[node name="Playfield" type="NinePatchRect" parent="."]
+texture_filter = 1
+offset_right = 720.0
+offset_bottom = 720.0
+texture = ExtResource("6_ahl3k")
+patch_margin_left = 32
+patch_margin_top = 32
+patch_margin_right = 32
+patch_margin_bottom = 32
+
+[node name="TileGrid" type="GridContainer" parent="Playfield"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 704.0
+offset_bottom = 704.0
+columns = 3
+
+[node name="ErrorLabel" type="Label" parent="Playfield"]
+visible = false
+layout_mode = 0
+offset_left = 16.0
+offset_top = 267.0
+offset_right = 704.0
+offset_bottom = 404.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 48
+text = "ERROR: Failed to save Level:
+%s"
+
+[node name="Enemy" type="Sprite2D" parent="."]
+position = Vector2(360, 0)
+texture = ExtResource("5_4ohjn")
+centered = false
+offset = Vector2(-256, 0)
+
+[node name="Player" type="Sprite2D" parent="."]
+position = Vector2(360, 0)
+texture = ExtResource("8_dx6d3")
+centered = false
+offset = Vector2(-256, 0)
+
+[node name="BulletButton" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
+offset_right = 48.0
+offset_bottom = 48.0
+
+[node name="SaveButton" type="Button" parent="."]
+offset_right = 48.0
+offset_bottom = 48.0
+theme = ExtResource("11_brq3b")
+icon = ExtResource("5_gbqyk")
+icon_alignment = 1
+expand_icon = true
+
+[node name="MenuButton" type="Button" parent="."]
+offset_right = 48.0
+offset_bottom = 48.0
+theme = ExtResource("11_brq3b")
+icon = ExtResource("12_qj4bx")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Menu" type="PanelContainer" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_vevib")
+offset_right = 720.0
+offset_bottom = 1280.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_p3su8")
+
+[node name="Margins" type="MarginContainer" parent="Menu"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 200
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 200
+
+[node name="Bullets" type="Node2D" parent="."]
+
+[connection signal="pressed" from="BulletButton" to="." method="_add_bullet"]
+[connection signal="pressed" from="SaveButton" to="." method="save"]

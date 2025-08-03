@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3 uid="uid://woay27jysiwk"]
+
+[ext_resource type="Theme" uid="uid://cjbd068b7pstb" path="res://themes/shooter_theme.tres" id="1_qoao2"]
+[ext_resource type="Texture2D" uid="uid://cegyspmf0gyya" path="res://sprites/ui/home_icon.svg" id="2_4hpeo"]
+[ext_resource type="Script" uid="uid://d2ofpgdxrf7vh" path="res://scripts/level_select.gd" id="2_ox527"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8bytd"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="LevelSelect" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_qoao2")
+theme_override_styles/panel = SubResource("StyleBoxFlat_8bytd")
+script = ExtResource("2_ox527")
+
+[node name="Home Button" type="Button" parent="."]
+layout_mode = 2
+offset_right = 240.0
+offset_bottom = 120.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Home
+"
+icon = ExtResource("2_4hpeo")
+expand_icon = true
+
+[node name="My Levels Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 480.0
+offset_right = 720.0
+offset_bottom = 120.0
+text = "My Levels"
+
+[node name="Margins" type="MarginContainer" parent="."]
+layout_mode = 2
+offset_top = 113.0
+offset_right = 720.0
+offset_bottom = 1280.0
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="LevelGrid" type="GridContainer" parent="Margins"]
+layout_mode = 2
+theme_override_constants/h_separation = 64
+theme_override_constants/v_separation = 64
+columns = 3
+
+[connection signal="pressed" from="Home Button" to="." method="_enter_home_menu"]

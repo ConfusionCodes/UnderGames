@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ShooterLevel" load_steps=2 format=3 uid="uid://8ynnodt36dvg"]
+
+[ext_resource type="Script" uid="uid://b07pmqb0lsuq5" path="res://scripts/shooter_level.gd" id="1_ms2eh"]
+
+[resource]
+script = ExtResource("1_ms2eh")
+size = 3
+bullets = 1
+tiles = PackedByteArray(2, 0, 2, 0, 1, 0, 0, 1, 0)
+notification = "Your goal is to shoot the enemy on the other side of the board.
+Use the arrow keys, or WASD to move the boxes out of the way, and Space or Enter to shoot.
+|
+Your goal is to shoot the enemy on the other side of the board.
+Swipe the screen in a direction to move the boxes out of the way, and tap the bottom spaceship to shoot."

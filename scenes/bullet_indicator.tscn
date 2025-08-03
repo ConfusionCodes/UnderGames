@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bh4a4dg1bph6j"]
+
+[ext_resource type="Texture2D" uid="uid://ci5jc2o085nde" path="res://sprites/bullet_indicator.svg" id="1_am0bh"]
+
+[node name="BulletIndicator" type="Sprite2D"]
+texture = ExtResource("1_am0bh")
+centered = false

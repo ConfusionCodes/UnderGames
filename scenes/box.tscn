@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://d0vemywseygr6"]
+
+[ext_resource type="Texture2D" uid="uid://mcgdaqtl682l" path="res://sprites/movable.svg" id="1_7eu7y"]
+[ext_resource type="Script" uid="uid://cswuo1emfo1b4" path="res://scripts/box.gd" id="2_4pmy3"]
+[ext_resource type="AudioStream" uid="uid://dpbpgvx4abh37" path="res://sounds/hit.wav" id="3_ij03k"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_siqwj"]
+size = Vector2(512, 512)
+
+[node name="Box" type="Sprite2D"]
+texture = ExtResource("1_7eu7y")
+script = ExtResource("2_4pmy3")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_siqwj")
+
+[node name="HitSfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_ij03k")
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_entered"]
