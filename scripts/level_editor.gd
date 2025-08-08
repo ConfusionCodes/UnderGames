@@ -1,7 +1,8 @@
 extends Node2D
 class_name LevelEditor
 
-const SCREEN_SIZE: float = 720.0;
+const SCREEN_WIDTH: float = 720.0;
+const SCREEN_HEIGHT: float = 1280.0;
 const DEBUG_LEVEL: String = "res://levels/debug.tres";
 
 @export var WALL_TEXTURE: Texture2D;
@@ -19,6 +20,7 @@ const DEBUG_LEVEL: String = "res://levels/debug.tres";
 @onready var bullets: Node2D = $Bullets
 @onready var grid_size_down_button: Button = %GridSizeDownButton
 @onready var grid_size_up_button: Button = %GridSizeUpButton
+@onready var grid_size_container: MarginContainer = %GridSizeContainer
 
 var path: String;
 var level: ShooterLevel;
@@ -54,20 +56,21 @@ func layout() -> void:
 		fake_tile.texture_normal = tile_texture(level.tiles[i]);
 	var tile_size: float = Board.get_tile_size(playfield.size.x, level.size);
 	var tile_scale: float = tile_size / Tile.BASE_SIZE;
-	playfield.position.y = tile_size * 1.5;
+	playfield.position.y = (tile_size * 1.5) if level.size > 3 else tile_size;
 	
 	enemy.scale = Vector2(tile_scale, tile_scale);
-	enemy.position.x = SCREEN_SIZE / 2;
+	enemy.position.x = SCREEN_WIDTH / 2;
 	player.scale = Vector2(tile_scale, tile_scale);
-	player.position.y = tile_size * 2 + playfield.size.y;
-	player.position.x = SCREEN_SIZE / 2;
+	player.position.y = playfield.position.y + playfield.size.y;
+	if level.size > 3: player.position.y += tile_size / 2;
+	player.position.x = SCREEN_WIDTH / 2;
 	if level.size % 2 == 0:
 		enemy.position.x += tile_size / 2;
 		player.position.x += tile_size / 2;
 	
 	bullet_button.position.y = player.position.y;
 	bullet_button.size.y = tile_size;
-	bullet_button.size.x = SCREEN_SIZE;
+	bullet_button.size.x = SCREEN_WIDTH;
 	
 	#if bullets.get_child_count() != level.bullets:
 	for child in bullets.get_children():
@@ -82,11 +85,12 @@ func layout() -> void:
 	
 	menu_button.size = Vector2(tile_size, tile_size);
 	save_button.size = Vector2(tile_size, tile_size);
-	save_button.position.x = 720 - tile_size;
-	grid_size_up_button.size = Vector2(tile_size, tile_size / 2);
-	grid_size_up_button.position.y = player.position.y;
-	grid_size_down_button.size = Vector2(tile_size, tile_size / 2);
-	grid_size_down_button.position.y = player.position.y + tile_size / 2;
+	save_button.position.x = SCREEN_WIDTH - tile_size;
+	
+	var remaining_height = SCREEN_HEIGHT - player.position.y;
+	var remaining_width = SCREEN_WIDTH - (SCREEN_WIDTH - player.position.x) - (512 * player.scale.x / 2);
+	grid_size_container.position.y = player.position.y;
+	grid_size_container.size = Vector2(remaining_width, remaining_height);
 
 func tile_texture(id: int) -> Texture2D:
 	match id:

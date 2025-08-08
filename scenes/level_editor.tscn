@@ -75,22 +75,6 @@ modulate = Color(1, 1, 1, 0)
 offset_right = 48.0
 offset_bottom = 48.0
 
-[node name="GridSizeUpButton" type="Button" parent="."]
-unique_name_in_owner = true
-offset_right = 48.0
-offset_bottom = 48.0
-theme = ExtResource("11_brq3b")
-text = "+"
-clip_text = true
-
-[node name="GridSizeDownButton" type="Button" parent="."]
-unique_name_in_owner = true
-offset_right = 48.0
-offset_bottom = 48.0
-theme = ExtResource("11_brq3b")
-text = "-"
-clip_text = true
-
 [node name="SaveButton" type="Button" parent="."]
 unique_name_in_owner = true
 offset_right = 48.0
@@ -142,11 +126,37 @@ text = "Level Select"
 
 [node name="Bullets" type="Node2D" parent="."]
 
+[node name="GridSizeContainer" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = 1080.0
+offset_right = 48.0
+offset_bottom = 1270.0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridSizeContainer"]
+layout_mode = 2
+
+[node name="GridSizeUpButton" type="Button" parent="GridSizeContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("11_brq3b")
+text = "+"
+clip_text = true
+
+[node name="GridSizeDownButton" type="Button" parent="GridSizeContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("11_brq3b")
+text = "-"
+clip_text = true
+
 [connection signal="pressed" from="BulletButton" to="." method="_add_bullet"]
-[connection signal="pressed" from="GridSizeUpButton" to="." method="_change_grid_size" binds= [1]]
-[connection signal="pressed" from="GridSizeDownButton" to="." method="_change_grid_size" binds= [-1]]
 [connection signal="pressed" from="SaveButton" to="." method="save"]
 [connection signal="pressed" from="MenuButton" to="Menu" method="_on_menu_button_pressed"]
 [connection signal="pressed" from="Menu/Margins/VBoxContainer/BackButton" to="Menu" method="_on_back_button_pressed"]
 [connection signal="pressed" from="Menu/Margins/VBoxContainer/PlayButton" to="Menu" method="_on_play_button_pressed"]
 [connection signal="pressed" from="Menu/Margins/VBoxContainer/LevelSelectButton" to="Menu" method="_on_level_select_button_pressed"]
+[connection signal="pressed" from="GridSizeContainer/VBoxContainer/GridSizeUpButton" to="." method="_change_grid_size" binds= [1]]
+[connection signal="pressed" from="GridSizeContainer/VBoxContainer/GridSizeDownButton" to="." method="_change_grid_size" binds= [-1]]
