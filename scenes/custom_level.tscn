@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://s5axejy586hs" path="res://scripts/custom_level.gd" id="1_w1nej"]
 [ext_resource type="Theme" uid="uid://cjbd068b7pstb" path="res://themes/shooter_theme.tres" id="1_w2108"]
+[ext_resource type="StyleBox" uid="uid://cv1ye4oj17cxi" path="res://themes/background_stylebox.tres" id="1_xvdse"]
 [ext_resource type="Texture2D" uid="uid://dyk4x1whvd7sn" path="res://sprites/ui/pen_icon.svg" id="2_ja577"]
 [ext_resource type="Texture2D" uid="uid://12awdfffw5ou" path="res://sprites/ui/trash_icon.svg" id="3_w2108"]
-[ext_resource type="Texture2D" uid="uid://dlnte6y5vpy5t" path="res://sprites/ui/gear_icon.svg" id="4_xvdse"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w2108"]
 
@@ -12,7 +12,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lk2bk"]
 
-[node name="PanelContainer" type="PanelContainer"]
+[node name="CustomLevelButton" type="PanelContainer"]
 custom_minimum_size = Vector2(512, 128)
 anchors_preset = 5
 anchor_left = 0.5
@@ -22,24 +22,24 @@ offset_right = 256.0
 offset_bottom = 64.0
 grow_horizontal = 2
 size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("1_xvdse")
 script = ExtResource("1_w1nej")
 
-[node name="CustomLevel" type="HBoxContainer" parent="."]
+[node name="Layout" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(512, 64)
 layout_mode = 2
 theme = ExtResource("1_w2108")
 theme_override_constants/separation = 16
 
-[node name="StartPadding" type="Control" parent="CustomLevel"]
+[node name="StartPadding" type="Control" parent="Layout"]
 layout_mode = 2
 
-[node name="TitleMargins" type="MarginContainer" parent="CustomLevel"]
+[node name="TitleMargins" type="MarginContainer" parent="Layout"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TitleEdit" type="LineEdit" parent="CustomLevel/TitleMargins"]
+[node name="TitleEdit" type="LineEdit" parent="Layout/TitleMargins"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
@@ -47,37 +47,24 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_w2108")
 theme_override_styles/read_only = SubResource("StyleBoxEmpty_xvdse")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_lk2bk")
 
-[node name="TitleLabel" type="Label" parent="CustomLevel/TitleMargins"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-
-[node name="RenameButton" type="Button" parent="CustomLevel"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_vertical = 4
-icon = ExtResource("2_ja577")
-expand_icon = true
-
-[node name="DeleteButton" type="Button" parent="CustomLevel"]
+[node name="DeleteButton" type="Button" parent="Layout"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_vertical = 4
 icon = ExtResource("3_w2108")
 expand_icon = true
 
-[node name="EditButton" type="Button" parent="CustomLevel"]
+[node name="EditButton" type="Button" parent="Layout"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_vertical = 4
-icon = ExtResource("4_xvdse")
+icon = ExtResource("2_ja577")
 expand_icon = true
 
-[node name="EndPadding" type="Control" parent="CustomLevel"]
+[node name="EndPadding" type="Control" parent="Layout"]
 layout_mode = 2
 
-[connection signal="text_submitted" from="CustomLevel/TitleMargins/TitleEdit" to="." method="_on_title_text_submitted"]
-[connection signal="pressed" from="CustomLevel/RenameButton" to="." method="_on_rename_button_pressed"]
-[connection signal="pressed" from="CustomLevel/DeleteButton" to="." method="_on_delete_button_pressed"]
-[connection signal="pressed" from="CustomLevel/EditButton" to="." method="_on_edit_button_pressed"]
+[connection signal="focus_exited" from="Layout/TitleMargins/TitleEdit" to="." method="_on_title_edit_focus_exited"]
+[connection signal="text_submitted" from="Layout/TitleMargins/TitleEdit" to="." method="_on_title_text_submitted"]
+[connection signal="pressed" from="Layout/DeleteButton" to="." method="_on_delete_button_pressed"]
+[connection signal="pressed" from="Layout/EditButton" to="." method="_on_edit_button_pressed"]
