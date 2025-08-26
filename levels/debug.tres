@@ -8,6 +8,6 @@ size = 4
 bullets = 2
 tiles = PackedByteArray(2, 0, 0, 2, 0, 1, 1, 2, 1, 2, 1, 2, 1, 0, 0, 2)
 notification = "Welcome to the debug level. You're not supposed to be here.
-Since you are, it means either the game's not finished yet, or I make a mistake in development.
+Since you are, it means either the game's not finished yet, or I made a mistake in development.
 Enjoy messing around!"
 custom = false
