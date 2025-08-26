@@ -1,6 +1,8 @@
 extends Sprite2D
 class_name Enemy
 
+signal killed();
+
 const LEFT_WING_POS = Vector2(-288, 512);
 const RIGHT_WING_POS = Vector2(288, 512);
 
@@ -42,4 +44,5 @@ func _on_hitbox_entered(area: Area2D) -> void:
 	tween.tween_property(right_wing, "position", Vector2(128, 256), 0.5).as_relative();
 	tween.tween_property(right_wing, "rotation", PI/2, 0.5);
 	tween.tween_property(right_wing, "modulate", Color.TRANSPARENT, 0.5);
+	killed.emit();
 	

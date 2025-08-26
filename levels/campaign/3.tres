@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ShooterLevel" load_steps=2 format=3 uid="uid://7nvf5tytsfkr"]
+
+[ext_resource type="Script" uid="uid://b07pmqb0lsuq5" path="res://scripts/shooter_level.gd" id="1_steqo"]
+
+[resource]
+script = ExtResource("1_steqo")
+size = 3
+bullets = 2
+tiles = PackedByteArray(2, 1, 2, 0, 0, 0, 2, 1, 2)
+notification = ""
+custom = false

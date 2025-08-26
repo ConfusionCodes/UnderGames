@@ -39,3 +39,11 @@ func _on_level_select_button_pressed() -> void:
 func _on_edit_button_pressed() -> void:
 	if board.level.custom:
 		SceneManager.enter_editor(SceneManager.current_path);
+
+
+func _on_next_button_pressed() -> void:
+	var next_number = SceneManager.current_path.get_file().get_slice(".", 0);
+	if !next_number.is_valid_int(): return;
+	var next_level = "%s%d.tres" % [LevelSelect.LEVEL_DIR, next_number.to_int() + 1];
+	if !ResourceLoader.exists(next_level): return;
+	SceneManager.enter_level(next_level)

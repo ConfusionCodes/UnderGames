@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://2xc7iukl6ghm"]
+[gd_scene load_steps=23 format=3 uid="uid://2xc7iukl6ghm"]
 
 [ext_resource type="Texture2D" uid="uid://blkyjoq1sfog6" path="res://sprites/background.svg" id="1_4qnlp"]
 [ext_resource type="Script" uid="uid://dh33sogk62kn6" path="res://scripts/board.gd" id="2_y628x"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bdodrgqf0wwbk" path="res://sprites/ui/reset_icon.svg" id="11_0pjs3"]
 [ext_resource type="Texture2D" uid="uid://yfaqch5kdc73" path="res://sprites/ui/menu_icon.svg" id="11_5a3dp"]
 [ext_resource type="Shader" uid="uid://cujewei8h3d5a" path="res://shaders/blur.gdshader" id="14_qanrj"]
+[ext_resource type="Texture2D" uid="uid://dchstyj5frk7o" path="res://sprites/ui/next_icon.svg" id="14_vevib"]
 [ext_resource type="Script" uid="uid://cipry4i6dg1md" path="res://scripts/board_ui.gd" id="15_o2hle"]
 [ext_resource type="Theme" uid="uid://cjbd068b7pstb" path="res://themes/shooter_theme.tres" id="15_xpmhc"]
 [ext_resource type="Script" uid="uid://rvxxh056twrl" path="res://scripts/swipe_detector.gd" id="16_lajar"]
@@ -105,6 +106,18 @@ icon = ExtResource("11_0pjs3")
 icon_alignment = 1
 expand_icon = true
 
+[node name="NextButton" type="Button" parent="."]
+unique_name_in_owner = true
+visible = false
+offset_right = 176.0
+offset_bottom = 176.0
+focus_neighbor_left = NodePath("../MenuButton")
+focus_previous = NodePath("../MenuButton")
+theme = ExtResource("15_xpmhc")
+icon = ExtResource("14_vevib")
+icon_alignment = 1
+expand_icon = true
+
 [node name="Menu" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 visible = false
@@ -144,6 +157,7 @@ expand_icon = true
 [node name="EditButton" type="Button" parent="Menu/Margins/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
+text = "Edit Level"
 
 [node name="LevelSelectButton" type="Button" parent="Menu/Margins/Buttons"]
 custom_minimum_size = Vector2(0, 128)
@@ -204,8 +218,10 @@ size_flags_horizontal = 4
 text = "Close
 "
 
+[connection signal="killed" from="Enemy" to="." method="_on_enemy_killed"]
 [connection signal="pressed" from="MenuButton" to="Menu" method="_on_menu_button_pressed"]
 [connection signal="pressed" from="ResetButton" to="Menu" method="_on_reset_button_pressed"]
+[connection signal="pressed" from="NextButton" to="Menu" method="_on_next_button_pressed"]
 [connection signal="pressed" from="Menu/Margins/Buttons/BackButton" to="Menu" method="_on_back_button_pressed"]
 [connection signal="pressed" from="Menu/Margins/Buttons/RestartButton" to="Menu" method="_on_restart_button_pressed"]
 [connection signal="pressed" from="Menu/Margins/Buttons/EditButton" to="Menu" method="_on_edit_button_pressed"]

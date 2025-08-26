@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="UnderGames"
-run/main_scene="res://scenes/board.tscn"
+run/main_scene="uid://b8jqwnckbt2kl"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
 [autoload]

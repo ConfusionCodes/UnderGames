@@ -11,6 +11,7 @@ const DEBUG_LEVEL: ShooterLevel = preload("res://levels/debug.tres");
 @onready var shoot_sfx: AudioStreamPlayer = %ShootSfx
 @onready var menu_button: Button = %MenuButton
 @onready var reset_button: Button = %ResetButton
+@onready var next_button: Button = %NextButton
 @onready var menu: BoardUi = %Menu
 @onready var notification_panel: PanelContainer = %NotificationPanel
 @onready var notification_label: Label = %NotificationLabel
@@ -70,7 +71,7 @@ func load_level(new_level: ShooterLevel) -> void:
 	level = new_level;
 	bullets = level.bullets;
 	tile_size = get_tile_size(playfield.size.x, level.size);
-	var error := contents.resize(level.size_squared());\
+	var error := contents.resize(level.size_squared());
 	if error != Error.OK:
 		printerr("Failed to resize contents array: %d" % error);
 	for i in range(level.tiles.size()):
@@ -117,6 +118,8 @@ func place_decorations() -> void:
 	menu_button.size = Vector2(tile_size, tile_size);
 	reset_button.size = Vector2(tile_size, tile_size);
 	reset_button.position.x = get_viewport_rect().size.x - tile_size;
+	next_button.size = reset_button.size;
+	next_button.position = reset_button.position;
 
 func place_contents() -> void:
 	var target_scale := tile_size / Tile.BASE_SIZE;
@@ -198,3 +201,9 @@ func shoot() -> void:
 func _on_notification_dismissed() -> void:
 	notification_panel.visible = false;
 	menu.is_open = false;
+
+
+func _on_enemy_killed() -> void:
+	if level.custom: return;
+	reset_button.visible = false;
+	next_button.visible = true;

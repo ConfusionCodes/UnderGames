@@ -65,7 +65,7 @@ func _on_create_button_pressed() -> void:
 func _edit_level(id: int) -> void:
 	var index: int = id_to_index(id);
 	if index == -1: return;
-	SceneManager.enter_editor(level_paths[index]);
+	SceneManager.enter_editor(CUSTOM_LEVEL_DIR.path_join(level_paths[index]));
 
 
 func _rename_level(id: int) -> void:

@@ -1,3 +1,31 @@
-[gd_scene format=3 uid="uid://b8jqwnckbt2kl"]
+[gd_scene load_steps=3 format=3 uid="uid://b8jqwnckbt2kl"]
 
-[node name="MainMenu" type="Node2D"]
+[ext_resource type="Theme" uid="uid://cjbd068b7pstb" path="res://themes/shooter_theme.tres" id="1_l6cm7"]
+[ext_resource type="Script" uid="uid://dwlr0egde005w" path="res://scripts/main_menu.gd" id="2_ekxnf"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+theme = ExtResource("1_l6cm7")
+script = ExtResource("2_ekxnf")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_top = 350.0
+offset_right = 720.0
+offset_bottom = 550.0
+theme_override_font_sizes/font_size = 100
+text = "UnderGames"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 125.0
+offset_top = 550.0
+offset_right = 595.0
+offset_bottom = 732.0
+theme_override_font_sizes/font_size = 80
+text = "Play"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

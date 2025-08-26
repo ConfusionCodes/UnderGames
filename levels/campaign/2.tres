@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="ShooterLevel" load_steps=2 format=3 uid="uid://qsa5s3drb3hd"]
+[gd_resource type="Resource" script_class="ShooterLevel" load_steps=2 format=3 uid="uid://d2v8x4c02gid0"]
 
-[ext_resource type="Script" uid="uid://b07pmqb0lsuq5" path="res://scripts/shooter_level.gd" id="1_xsbiu"]
+[ext_resource type="Script" uid="uid://b07pmqb0lsuq5" path="res://scripts/shooter_level.gd" id="1_v3sdp"]
 
 [resource]
-script = ExtResource("1_xsbiu")
+script = ExtResource("1_v3sdp")
 size = 3
 bullets = 2
-tiles = PackedByteArray(2, 0, 2, 1, 1, 0, 0, 1, 2)
-notification = "Sometimes you may need to destroy some boxes to clear the way. The indicator on the bottom-right shows you how many bullets you have."
+tiles = PackedByteArray(0, 0, 2, 2, 1, 1, 2, 1, 2)
+notification = ""
+custom = false
